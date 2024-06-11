@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <cstdio>
 #include <iostream>
 
 struct Obstacle {
@@ -42,6 +43,16 @@ int main() {
     srand(time(0));
 
 
+    //Dodawanie modeli
+    Model robot = LoadModel("robot.glb");
+
+    int animsCount = 7;
+    unsigned int animIndex = 6;
+    unsigned int animCurrentFrame = 0;
+    ModelAnimation* modelAnimations = LoadModelAnimations("robot.glb", &animsCount);
+
+    Vector3 ludek_position = { 0.0f, 1.0f, 0.0f };
+
     SetTargetFPS(60);
     float obstacleTimer = 0.0f;
 
@@ -49,7 +60,7 @@ int main() {
 
         //Generowanie przeszkod
         obstacleTimer += GetFrameTime();
-        if (obstacleTimer>2.0f)
+        if (obstacleTimer > 2.0f)
         {
             isObstacle = true;
             obstacleTimer = 0;
@@ -57,7 +68,7 @@ int main() {
         if (isObstacle)
         {
             Obstacle obs;
-            obs.position = Vector3{ float(rand() % 3 * 4 - 4), 1.0f, -100.0f};
+            obs.position = Vector3{ float(rand() % 3 * 4 - 4), 1.0f, -100.0f };
             obs.width = 2.0f;
             obs.height = 2.0f;
             obs.length = 2.0f;
@@ -66,7 +77,7 @@ int main() {
         }
         // Aktualizacja gracza
 
-        if (playerPosition.x >-4)
+        if (playerPosition.x > -4)
         {
             if (IsKeyPressed(KEY_LEFT)) playerPosition.x -= 4;
         }
@@ -80,9 +91,15 @@ int main() {
             verticalSpeed = jumpSpeed;
         }
 
+
+        // Update model animation
+        ModelAnimation anim = modelAnimations[animIndex];
+        animCurrentFrame = (animCurrentFrame + 2) % anim.frameCount;
+        UpdateModelAnimation(robot, anim, animCurrentFrame);
+
         //aktualizacja wyniku
         score++;
-        
+
 
         //restart
         if (IsKeyPressed(KEY_R))
@@ -120,14 +137,13 @@ int main() {
             }
         }
 
-        
+
         ClearBackground(RAYWHITE);
 
         BeginMode3D(camera);
 
         // Rysowanie gracza
-        DrawCube(playerPosition, playerWidth, playerHeight, playerWidth, BLUE);
-        DrawCubeWires(playerPosition, playerWidth, playerHeight, playerWidth, DARKBLUE);
+        DrawModelEx(robot, playerPosition, Vector3{ 0.0f, 1.0f, 0.0f }, 180.0f, Vector3{ 0.3f, 0.3f, 0.3f }, WHITE);
 
         // Rysowanie przeszkód
         for (const auto& obs : obstacles) {
@@ -141,11 +157,13 @@ int main() {
         EndMode3D();
 
         DrawText("Ue LEFT and RIGHT to move, SPACE to jump", 10, 10, 20, DARKGRAY);
-        DrawText(TextFormat("Score : %i",score), 10, 30, 20, DARKGRAY);
+        DrawText(TextFormat("Score : %i", score), 10, 30, 20, DARKGRAY);
 
         EndDrawing();
     }
 
+
+    UnloadModel(robot);
     CloseWindow();
     return 0;
 }
