@@ -1,7 +1,1 @@
-﻿  Endlesrunner.cpp
-C:\Users\pd720\source\repos\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(49,15): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-C:\Users\pd720\source\repos\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(126,38): warning C4018: "<=": niezgodność typu ze znakiem/bez znaku
-C:\Users\pd720\source\repos\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(145,31): warning C4244: "inicjowanie": konwersja z "float" do "int", możliwa utrata danych
-  Endlesrunner.vcxproj -> C:\Users\pd720\source\repos\POiGK_Endless_Runner\x64\Debug\Endlesrunner.exe
-  'pwsh.exe' is not recognized as an internal or external command,
-  operable program or batch file.
+﻿  Endlesrunner.vcxproj -> C:\Users\pd720\source\repos\POiGK_Endless_Runner\x64\Debug\Endlesrunner.exe

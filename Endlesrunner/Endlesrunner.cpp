@@ -14,8 +14,8 @@ struct Obstacle {
 };
 
 int main() {
-    const int screenWidth = 700;
-    const int screenHeight = 800;
+    const int screenWidth = 1080;
+    const int screenHeight = 920;
 
     InitWindow(screenWidth, screenHeight, "Endless Runner");
     // Definicja kamery
@@ -31,11 +31,12 @@ int main() {
     float playerWidth = 1.0f;
     float playerHeight = 2.0f;
     float playerSpeed = 25.0f;
-    float gravity = 20.0f;
+    float gravity = 22.0f;
     float jumpSpeed = 10.0f;
     bool isJumping = false;
     float verticalSpeed = 0.0f;
 
+    int licznik = 0;
     int score = 0;
     bool gameOver = false;
 
@@ -47,22 +48,18 @@ int main() {
     float obstacleTimer = 0.0f;
     float obstacleTimer_zero = 2.0f;
     srand(time(0));
+    float zcoorobs = -100.0f;
 
     // Dodawanie drogi
-    Texture2D texture = LoadTexture("cubicmap_atlas.png");
-    Mesh cubeMesh = GenMeshCube(1.0f, 1.0f, 1.0f);
+    Texture2D texture = LoadTexture("quartercubic.png");
+    Mesh cubeMesh = GenMeshCube(15.0f, 1.0f, 100.0f);
     Model cubeModel = LoadModelFromMesh(cubeMesh);
     cubeModel.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texture;
     std::vector<Obstacle> droga;
-    for (int i = 7; i >= -100; i--) {
-        for (int j = -4; j <= 4; j++) {
+    for (int i = 7; i >= -10; i--) {
             Obstacle path;
-            path.position = Vector3{ float(j), 0.2f, float(i) };
-            path.width = 1.0f;
-            path.height = 1.0f;
-            path.length = 1.0f;
+            path.position = Vector3{ 0.0f, 0.2f, float(i)*100 };
             droga.push_back(path);
-        }
     }
 
     // Dodawanie robota
@@ -84,7 +81,11 @@ int main() {
             }
             if (isObstacle) {
                 Obstacle obs;
-                obs.position = Vector3{ float(rand() % 3 * 3 - 3), 1.0f, -100.0f };
+                if (zcoorobs >= -300.0f)
+                {
+                    zcoorobs -= 100.0f;
+                }
+                obs.position = Vector3{ float(rand() % 3 * 3 - 3), 1.0f, zcoorobs };
                 obs.width = 2.0f;
                 obs.height = 1.0f;
                 obs.length = 2.0f;
@@ -148,6 +149,17 @@ int main() {
                 
                 if (obs.position.z > camera.position.z + 10.0f) obstacles.erase(obstacles.begin());           
             }
+
+            //aktualizacja drogi
+            for (auto& path : droga) {
+                path.position.z += playerSpeed * GetFrameTime();
+                if (path.position.z >= camera.position.z + 100.0f) {
+                    Obstacle buf;
+                    buf.position = Vector3{ 0.0f, 0.2f, droga[17].position.z - 100.0f};
+                    droga.push_back(buf);
+                    droga.erase(droga.begin());
+                }
+            }
         }
         // restart
         if (IsKeyPressed(KEY_R)) {
@@ -158,15 +170,7 @@ int main() {
             gameOver = false;
         }
 
-        // aktualizacja drogi // COS TU SIE SYPIE I WYWALA PROGRAM, ZEBY DZIALALO TRZEBA ZAKOMENTOWAC
-        // for (auto& path : droga) {
-        //     path.position.z += playerSpeed * GetFrameTime()/1.3;
-
-        //     if (path.position.z > camera.position.z + 10.0f) {
-        //         droga.push_back(path);
-        //         // droga.erase(droga.begin());
-        //     }
-        // }
+         
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -177,11 +181,11 @@ int main() {
         for (const auto& obs : obstacles) {
             switch (obs.type) {
             case 0: {
-                DrawModelEx(beczka, Vector3{ obs.position.x,  obs.position.y + 0.5f, obs.position.z, }, Vector3{ 0.0f, 1.0f, 0.0f }, 90.0f, Vector3{ 0.15f, 0.15f ,0.15f }, WHITE);
+                DrawModelEx(beczka, Vector3{ obs.position.x,  obs.position.y, obs.position.z-0.7f}, Vector3{ 0.0f, 1.0f, 0.0f }, 90.0f, Vector3{ 0.15f, 0.15f ,0.15f }, WHITE);
                 break;
             }
             case 1: {
-                DrawModelEx(laser, Vector3{ obs.position.x,  obs.position.y + 0.5f, obs.position.z, }, Vector3{ 1.0f, 0.0f, 0.0f }, 90.0f, Vector3{ 1.0f, 1.0f ,1.0f }, WHITE);
+                DrawModelEx(laser, Vector3{ obs.position.x,  obs.position.y + 0.8f, obs.position.z-0.2f }, Vector3{ 1.0f, 0.0f, 0.0f }, 90.0f, Vector3{ 1.0f, 1.0f , 1.8f }, WHITE);
                 break;
             }
             }
