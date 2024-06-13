@@ -14,6 +14,7 @@ struct Obstacle {
     int type;
 };
 
+
 int main() {
     const int screenWidth = 1080;
     const int screenHeight = 920;
@@ -56,6 +57,17 @@ int main() {
     float obstacleTimer_zero = 2.0f;
     srand(time(0));
     float zcoorobs = -100.0f;
+    Obstacle startobs;
+    while (zcoorobs >= -300.0f)
+    {
+        startobs.position = Vector3{ float(rand() % 3 * 3 - 3), 1.0f, zcoorobs };
+        startobs.width = 2.0f;
+        startobs.height = 1.0f;
+        startobs.length = 2.0f;
+        startobs.type = rand() % 2;
+        obstacles.push_back(startobs);
+        zcoorobs -= 50.0f;
+    }
 
     // Dodawanie drogi
     Texture2D texture = LoadTexture("quartercubic.png");
@@ -118,11 +130,7 @@ int main() {
             }
             if (isObstacle) {
                 Obstacle obs;
-                if (zcoorobs >= -300.0f)
-                {
-                    zcoorobs -= 100.0f;
-                }
-                obs.position = Vector3{ float(rand() % 3 * 3 - 3), 1.0f, zcoorobs };
+                obs.position = Vector3{ float(rand() % 3 * 3 - 3), 1.0f, -300.0f };
                 obs.width = 2.0f;
                 obs.height = 1.0f;
                 obs.length = 2.0f;
