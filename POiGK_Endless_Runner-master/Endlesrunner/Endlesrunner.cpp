@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include <cstdio>
 #include <iostream>
 
@@ -39,6 +40,12 @@ int main() {
     int licznik = 0;
     int score = 0;
     bool gameOver = false;
+    std::ifstream file("highscore.txt");
+    int highScore = 0;
+    if (file.is_open()) {
+        file >> highScore;
+        file.close();
+    }
 
     // Inicjalizacja przeszkód
     Model laser = LoadModel("laser.glb");
@@ -175,8 +182,19 @@ int main() {
 
                 int pointzero = obs.position.z;
                 
-                if (playerPosition.z == pointzero && playerPosition.x == obs.position.x && playerPosition.y == obs.position.y)  gameOver = true;
-                
+                if (playerPosition.z == pointzero && playerPosition.x == obs.position.x && playerPosition.y == obs.position.y) 
+                {
+                    gameOver = true;
+                    if (score > highScore)
+                    {
+                        highScore = score;
+                        std::ofstream file("highscore.txt");
+                        if (file.is_open()) {
+                            file << highScore;
+                            file.close();
+                        }
+                    }
+                }
                 if (obs.position.z > camera.position.z + 10.0f) obstacles.erase(obstacles.begin());           
             }
 
@@ -239,7 +257,7 @@ int main() {
         for (const auto& obs : obstacles) {
             switch (obs.type) {
             case 0: {
-                DrawModelEx(beczka, Vector3{ obs.position.x,  obs.position.y, obs.position.z-0.7f}, Vector3{ 0.0f, 1.0f, 0.0f }, 90.0f, Vector3{ 0.15f, 0.15f ,0.15f }, WHITE);
+                DrawModelEx(beczka, Vector3{ obs.position.x,  obs.position.y, obs.position.z-1.5f}, Vector3{ 0.0f, 1.0f, 0.0f }, 90.0f, Vector3{ 0.15f, 0.15f ,0.15f }, WHITE);
                 break;
             }
             case 1: {
@@ -272,22 +290,24 @@ int main() {
         EndMode3D();
 
         // Pokazywanie FPS
-        DrawFPS(20, 50);
+        //DrawFPS(20, 50);
 
         // Game Over
         if (gameOver)
         {
-            DrawText("GAME OVER", 200, 60, 50, BLACK);
+            DrawText("GAME   OVER", 265, 60, 80, WHITE);
         }
-        DrawText("Use LEFT and RIGHT to move, SPACE to jump", 10, 10, 20, DARKGRAY);
-        DrawText(TextFormat("Score : %i", score), 10, 30, 20, DARKGRAY);
-
+        DrawText("Use LEFT and RIGHT to move, SPACE to jump", 10, 10, 20, WHITE);
+        DrawText(TextFormat("Score : %i", score), 10, 30, 40, WHITE);
+        DrawText("Highest score", 850, 15, 25, WHITE);
+        DrawText(TextFormat("%i", highScore), 900, 40, 30, WHITE);
         EndDrawing();
     }
 
 
     UnloadModel(robot);
     UnloadModel(cubeModel);
+    UnloadTexture(texture2);
     UnloadTexture(texture);
     CloseWindow();
     return 0;
