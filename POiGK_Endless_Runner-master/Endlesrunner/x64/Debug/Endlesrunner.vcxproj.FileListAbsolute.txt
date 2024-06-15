@@ -1,2 +1,0 @@
-C:\Users\user\Desktop\P4\Endlesrunner\Endlesrunner\x64\Debug\Endlesrunner.vcxproj.CopyComplete
-C:\Users\user\Desktop\POiGK_Endless_Runner-master\Endlesrunner\x64\Debug\Endlesrunner.vcxproj.CopyComplete
