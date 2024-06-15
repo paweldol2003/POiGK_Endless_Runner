@@ -1,1 +1,1 @@
-Należy odpalić solucję z folderu POiGL_Endless_Runner
+Należy włączyć solucję z folderu POiGL_Endless_Runner
