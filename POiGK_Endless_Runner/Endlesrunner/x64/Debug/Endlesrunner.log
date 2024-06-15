@@ -1,0 +1,7 @@
+﻿  Endlesrunner.cpp
+C:\Users\user\Desktop\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(58,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\user\Desktop\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(172,38): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\user\Desktop\POiGK_Endless_Runner\Endlesrunner\Endlesrunner.cpp(191,31): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Endlesrunner.vcxproj -> C:\Users\user\Desktop\POiGK_Endless_Runner\x64\Debug\Endlesrunner.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
